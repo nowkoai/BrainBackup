@@ -115,7 +115,7 @@
         let dataview = encodeWAV(mergeBuffers(audioData), audio_sample_rate);
         let audioBlob = new Blob([dataview], { type: "audio/wav" });
 
-        uploadURL = "./record";
+        uploadURL = "./record/";
         fetch(uploadURL, {
           method: "POST",
           cache: "no-cache",

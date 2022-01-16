@@ -4,13 +4,62 @@ from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
 from django.views.generic import TemplateView
 from .models import InputText
+import django
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from .form import SignUpForm
+from django.contrib.auth import authenticate, login as auth_login, get_user_model
+from django.contrib import messages
+
+User = get_user_model()
 
 
 def index(request):
     latest_data = ''
     if InputText.objects.all().count() > 0:
         latest_data = InputText.objects.latest('pub_date')
-    return render(request, 'record/index.html', {'data': "【文字起こし結果】:"+str(latest_data)})
+    return render(request, 'app/index.html', {'data': "【文字起こし結果】:"+str(latest_data)})
+
+
+def sign_up(request):
+    if request.method == 'POST':
+        signup_form = SignUpForm(request.POST)
+        if signup_form.is_valid():
+            username = signup_form.cleaned_data.get('username')
+            email = signup_form.cleaned_data.get('email')
+            password = signup_form.cleaned_data.get('password')
+
+            user = User.objects.create_user(username, email, password)
+            user.save()
+
+            user = authenticate(request, username=username, password=password)
+            auth_login(request, user,
+                       backend='django.contrib.auth.backends.ModelBackend')
+            messages.add_message(request, messages.SUCCESS, 'ユーザー登録が完了しました！')
+            return redirect('home')
+    else:
+        signup_form = SignUpForm()
+
+    context = {
+        'signup_form': signup_form,
+    }
+    return render(request, 'app/signup.html', context)
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user_instance = form.save()
+            login(request, user_instance)
+            return redirect("app:index")
+    else:
+        form = UserCreationForm()
+
+    context = {
+        "form": form
+    }
+    return render(request, 'app/signup.html', context)
 
 
 class MyView(TemplateView):
@@ -22,7 +71,7 @@ class MyView(TemplateView):
         return context
 
     def get(self, request):
-        return render(request, 'record/index.html', {'data': "output"})
+        return render(request, 'app/index.html', {'data': "output"})
 
     def post(self, request, *args, **kwargs):
         audio_wav = request.body
@@ -39,4 +88,4 @@ class MyView(TemplateView):
         input_text = InputText(text=output)
         input_text.save()
         self.kwargs['data'] = output
-        return render(request, 'record/index.html', context=self.kwargs)
+        return render(request, 'app/index.html', context=self.kwargs)
