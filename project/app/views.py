@@ -19,31 +19,6 @@ def index(request):
     return render(request, 'app/index.html', {'data': "【文字起こし結果】:"+str(latest_data)})
 
 
-def sign_up(request):
-    if request.method == 'POST':
-        signup_form = UserCreationForm(request.POST)
-        if signup_form.is_valid():
-            username = signup_form.cleaned_data.get('username')
-            email = signup_form.cleaned_data.get('email')
-            password = signup_form.cleaned_data.get('password')
-
-            user = User.objects.create_user(username, email, password)
-            user.save()
-
-            user = authenticate(request, username=username, password=password)
-            auth_login(request, user,
-                       backend='django.contrib.auth.backends.ModelBackend')
-            messages.add_message(request, messages.SUCCESS, 'ユーザー登録が完了しました！')
-            return redirect('home')
-    else:
-        signup_form = UserCreationForm()
-
-    context = {
-        'signup_form': signup_form,
-    }
-    return render(request, 'app/signup.html', context)
-
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
