@@ -1,13 +1,11 @@
-from django.shortcuts import render, resolve_url, redirect
+from django.shortcuts import render, redirect
 from django.http import request
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
 from django.views.generic import TemplateView
 from .models import InputText
-import django
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from .form import SignUpForm
+from .form import UserCreationForm
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
 from django.contrib import messages
 
@@ -23,7 +21,7 @@ def index(request):
 
 def sign_up(request):
     if request.method == 'POST':
-        signup_form = SignUpForm(request.POST)
+        signup_form = UserCreationForm(request.POST)
         if signup_form.is_valid():
             username = signup_form.cleaned_data.get('username')
             email = signup_form.cleaned_data.get('email')
@@ -38,7 +36,7 @@ def sign_up(request):
             messages.add_message(request, messages.SUCCESS, 'ユーザー登録が完了しました！')
             return redirect('home')
     else:
-        signup_form = SignUpForm()
+        signup_form = UserCreationForm()
 
     context = {
         'signup_form': signup_form,
