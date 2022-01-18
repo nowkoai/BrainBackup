@@ -34,6 +34,7 @@
       <button id="stop">
         Stop
       </button>
+      <a id="output window"></a>
     </center>
     <script>
       // for html
@@ -119,15 +120,21 @@
         uploadURL = "./record/";
         fetch(uploadURL, {
           method: "POST",
-          cache: "no-cache",
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          cache: 'no-cache',
           body: audioBlob,
-        }).then((resp) => {
+        })
+        .then((resp) => {
           if (resp.status === 200) {
-            window.location.reload(ture);
+            {% comment %} window.location.reload(ture); {% endcomment %}
+            return resp.json();
           } else {
             console.log("error", resp);
           }
-        });
+        })
+        .then(resp => document.getElementById("output window").innerHTML = "【文字起こし結果】："+resp.data);
 
         console.log(dataview);
 
@@ -184,6 +191,5 @@
         console.log("saved wav");
       });
     </script>
-    {{data}}
   </body>
 </html>

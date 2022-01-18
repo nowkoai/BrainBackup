@@ -8,6 +8,8 @@ from django.contrib.auth import login
 from .form import UserCreationForm
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
 from django.contrib import messages
+from django.http import JsonResponse
+
 
 User = get_user_model()
 
@@ -61,4 +63,4 @@ class MyView(TemplateView):
         input_text = InputText(text=output)
         input_text.save()
         self.kwargs['data'] = output
-        return render(request, 'app/index.html', context=self.kwargs)
+        return JsonResponse({'data': output})
