@@ -21,13 +21,17 @@ def index(request):
     return render(request, 'app/index.html', {'data': "【文字起こし結果】:"+str(latest_data)})
 
 
+def home(request):
+    return render(request, 'app/home.html')
+
+
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user_instance = form.save()
             login(request, user_instance)
-            return redirect("app:index")
+            return redirect("app:home")
     else:
         form = UserCreationForm()
 
@@ -37,7 +41,7 @@ def signup(request):
     return render(request, 'app/signup.html', context)
 
 
-class MyView(TemplateView):
+class RecordView(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
@@ -48,7 +52,7 @@ class MyView(TemplateView):
     def get(self, request):
         return render(request, 'app/index.html', {'data': "output"})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         audio_wav = request.body
 
         with open('audio/audio.wav', 'wb') as f:

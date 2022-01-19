@@ -12,8 +12,7 @@
   </button>
   <a id="output window">{{data}}</a>
 </center>
-</br>
-※体験版では録音が一度に30秒までです。制限解除するにはサインアップしてください。
+
 <script>
   // for html
   const recordLink = document.getElementById("record");
@@ -151,12 +150,12 @@
 
     // when time passed without pushing the stop button
     setTimeout(function () {
-      console.log("10 sec");
+      console.log("10 min");
       if (stopButton.disabled == false) {
         saveAudio();
         console.log("saved audio");
       }
-    }, 10000);
+    }, 600000);
   };
 
   recordLink.addEventListener("click", function () {
