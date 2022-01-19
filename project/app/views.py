@@ -21,7 +21,8 @@ def index(request):
 
 def home(request):
     latest_data = ''
-    if InputText.objects.all().count() > 0:
+    if InputText.objects.filter(
+            user=request.user).count() > 0:
         latest_data = InputText.objects.filter(
             user=request.user).latest('pub_date')
     return render(request, 'app/home.html', {'data': "【文字起こし結果】:"+str(latest_data)})
@@ -87,5 +88,4 @@ class RecordView(TemplateView):
         input_text = InputText(text=output)
         input_text.user = request.user
         input_text.save()
-        self.kwargs['data'] = output
         return JsonResponse({'data': output})
