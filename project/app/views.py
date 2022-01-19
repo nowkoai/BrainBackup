@@ -9,20 +9,22 @@ from .form import UserCreationForm
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 User = get_user_model()
 
 
 def index(request):
-    latest_data = ''
-    if InputText.objects.all().count() > 0:
-        latest_data = InputText.objects.latest('pub_date')
-    return render(request, 'app/index.html', {'data': "【文字起こし結果】:"+str(latest_data)})
+    return render(request, 'app/index.html')
 
 
 def home(request):
-    return render(request, 'app/home.html')
+    latest_data = ''
+    if InputText.objects.all().count() > 0:
+        latest_data = InputText.objects.filter(
+            user=request.user).latest('pub_date')
+    return render(request, 'app/home.html', {'data': "【文字起こし結果】:"+str(latest_data)})
 
 
 def signup(request):
@@ -39,6 +41,24 @@ def signup(request):
         "form": form
     }
     return render(request, 'app/signup.html', context)
+
+
+class RecordTrialView(TemplateView):
+    template_name = 'index.html'
+
+    def post(self, request):
+        audio_wav = request.body
+
+        with open('audio/audio.wav', 'wb') as f:
+            f.write(audio_wav)
+            r = sr.Recognizer()
+            with sr.AudioFile('audio/audio.wav') as source:
+                audio_data = r.record(source)
+
+        output = r.recognize_google(audio_data, language='ja-JP')
+        print(output)
+
+        return JsonResponse({'data': output})
 
 
 class RecordView(TemplateView):
@@ -65,6 +85,7 @@ class RecordView(TemplateView):
         print(output)
 
         input_text = InputText(text=output)
+        input_text.user = request.user
         input_text.save()
         self.kwargs['data'] = output
         return JsonResponse({'data': output})

@@ -19,6 +19,7 @@
   const recordLink = document.getElementById("record");
   const downloadLink = document.getElementById("download");
   const stopButton = document.getElementById("stop");
+  stopButton.setAttribute("disabled", "disabled");
 
   // for audio
   let audio_sample_rate = null;
@@ -122,6 +123,7 @@
   // stop button
   stopButton.addEventListener("click", function () {
     saveAudio();
+    recordLink.removeAttribute("disabled");
     console.log("saved wav");
   });
 
@@ -146,13 +148,15 @@
     mediastreamsource.connect(scriptProcessor);
     scriptProcessor.onaudioprocess = onAudioProcess;
     scriptProcessor.connect(audioContext.destination);
+    recordLink.setAttribute("disabled", "disabled");
+    stopButton.removeAttribute("disabled");
 
     console.log("record start?");
 
     // when time passed without pushing the stop button
     setTimeout(function () {
       console.log("30 sec");
-      if (stopButton.disabled == false) {
+      if (recordLink.disabled == ture) {
         saveAudio();
         console.log("saved audio");
       }

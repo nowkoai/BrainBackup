@@ -6,15 +6,6 @@ from django.contrib.auth.models import (
 )
 
 
-class InputText(models.Model):
-    text = models.TextField()
-    pub_date = models.DateTimeField(
-        default=timezone.now)
-
-    def __str__(self):
-        return self.text
-
-
 class MyUserManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None):
         """
@@ -81,3 +72,13 @@ class MyUser(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+class InputText(models.Model):
+    text = models.TextField()
+    pub_date = models.DateTimeField(
+        default=timezone.now)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.text
