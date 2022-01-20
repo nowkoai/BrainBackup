@@ -95,9 +95,10 @@ class RecordView(LoginRequiredMixin, TemplateView):
                 audio_data = r.record(source)
 
         output = r.recognize_google(audio_data, language='ja-JP')
+        sentences = output.split(' ')
         print(output)
 
-        input_text = InputText(text=output)
-        input_text.user = request.user
-        input_text.save()
+        for sentence in sentences:
+            input_text = InputText(text=sentence, user=request.user)
+            input_text.save()
         return JsonResponse({'data': output})

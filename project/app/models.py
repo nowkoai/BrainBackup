@@ -82,3 +82,13 @@ class InputText(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Relation(models.Model):
+    parent_text_id = models.TextField()
+    child_text_id = models.TextField()
+    input_text = models.ForeignKey(
+        InputText, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.text

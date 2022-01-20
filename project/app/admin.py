@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import InputText
+from app.models import InputText, Relation
 from django import forms
 from .models import MyUser
 from django.contrib.auth.models import Group
@@ -8,6 +8,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 admin.site.register(InputText)
+admin.site.register(Relation)
 
 
 class UserCreationForm(forms.ModelForm):
