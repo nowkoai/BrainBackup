@@ -4,54 +4,12 @@
 
 <!DOCTYPE html>
 
-<button id="start-btn">start</button>
-<button id="stop-btn">stop</button>
-<div id="result-div"></div>
-
-<script>
-  const startBtn = document.querySelector('#start-btn');
-  const stopBtn = document.querySelector('#stop-btn');
-  const resultDiv = document.querySelector('#result-div');
-
-  SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
-  let recognition = new SpeechRecognition();
-
-  recognition.lang = 'ja-JP';
-  recognition.interimResults = true;
-  recognition.continuous = true;
-
-  let finalTranscript = ''; // 確定した(黒の)認識結果
-
-  recognition.onresult = (event) => {
-    let interimTranscript = ''; // 暫定(灰色)の認識結果
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      let transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript = transcript;
-      } else {
-        interimTranscript = transcript;
-      }
-    }
-    resultDiv.innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</i>';
-  }
-
-  startBtn.onclick = () => {
-    recognition.start();
-  }
-  stopBtn.onclick = () => {
-    recognition.stop();
-  }
-</script>
+  
 <center>
-  <button id="record" onclick="startRecordhing()">Record</button>
-  <button id="stop">
-    Stop
-  </button>
+  <button id="record">Record</button>
+  <button id="stop">Stop</button>
   <a id="output window">{{data}}</a>
 </center>
-</br>
-※体験版では録音が一度に30秒までです。制限解除するにはサインアップしてください。と申しております。
-
 <script>
   // for html
   const recordLink = document.getElementById("record");
@@ -143,7 +101,7 @@
     })
     .then((resp) => {
       if (resp.status === 200) {
-         window.location.reload(ture);
+        {% comment %} window.location.reload(ture); {% endcomment %}
         return resp.json();
       } else {
         console.log("error", resp);
@@ -198,7 +156,7 @@
         saveAudio();
         console.log("saved audio");
       }
-    }, 30000);
+    }, 600000);
   };
 
   recordLink.addEventListener("click", function () {
