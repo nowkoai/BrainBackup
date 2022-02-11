@@ -102,7 +102,7 @@
     })
     .then((resp) => {
       if (resp.status === 200) {
-        {% comment %} window.location.reload(ture); {% endcomment %}
+        
         return resp.json();
       } else {
         console.log("error", resp);
