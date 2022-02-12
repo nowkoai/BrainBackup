@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import request
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView,View
 from .models import InputText
 from django.contrib.auth import login
 from .form import UserCreationForm
@@ -11,6 +11,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import Blog
 
 
 def index(request):
@@ -102,3 +104,5 @@ class RecordView(LoginRequiredMixin, TemplateView):
             input_text = InputText(text=sentence, user=request.user)
             input_text.save()
         return JsonResponse({'data': output})
+
+
