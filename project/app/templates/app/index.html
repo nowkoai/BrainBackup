@@ -6,31 +6,21 @@
 
 <div class="my-4 text-center">
   <div class="row">
-    <div class="col-md-6 mb-4">
-      <h2>記事の追加</h2>
+    <div class="col-md-12 mb-2">
       <form id="add_blog">
         {% csrf_token %}
         <input class="form-control" type="text" id="post_title" required />
-        <button class="btn btn-primary mt-2" type="submit">送信</button>
       </form>
     </div>
 
-    <div class="col-md-6 mb-4">
-      <h2>記事の検索</h2>
-      <form id="search_blog">
-        {% csrf_token %}
-        <input class="form-control" type="text" id="search_title" />
-        <button class="btn btn-warning mt-2" type="submit">検索</button>
-      </form>
-    </div>
+    
   </div>
 </div>
-<hr />
-<div class="my-5 text-center">
-  <h2 class="mb-2">記事一覧</h2>
+
+<div class="my-2 text-center">
   <div class="row" id="posts">
     {% for blog in blog_data %}
-    <div class="col-4 mb-3">
+    <div class="col-4 mb-2">
       <div class="card">
         <div class="card-body">{{ blog.title }}</div>
       </div>
