@@ -4,212 +4,146 @@
 
 <!DOCTYPE html>
 
-<button id="start-btn">start</button>
-<button id="stop-btn">stop</button>
-<div id="result-div"></div>
+{% extends "app/base.html" %} {% block content %}
+<div class="my-4 text-center">
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <h2>記事の追加</h2>
+      <form id="add_blog">
+        {% csrf_token %}
+        <input class="form-control" type="text" id="post_title" required />
+        <button class="btn btn-primary mt-2" type="submit">送信</button>
+      </form>
+    </div>
 
+    <div class="col-md-6 mb-4">
+      <h2>記事の検索</h2>
+      <form id="search_blog">
+        {% csrf_token %}
+        <input class="form-control" type="text" id="search_title" />
+        <button class="btn btn-warning mt-2" type="submit">検索</button>
+      </form>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="my-5 text-center">
+  <h2 class="mb-2">記事一覧</h2>
+  <div class="row" id="posts">
+    {% for blog in blog_data %}
+    <div class="col-4 mb-3">
+      <div class="card">
+        <div class="card-body">{{ blog.title }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %} {% block extrajs %}
 <script>
-  const startBtn = document.querySelector('#start-btn');
-  const stopBtn = document.querySelector('#stop-btn');
-  const resultDiv = document.querySelector('#result-div');
+  // https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data
 
-  SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
-  let recognition = new SpeechRecognition();
-
-  recognition.lang = 'ja-JP';
-  recognition.interimResults = true;
-  recognition.continuous = true;
-
-  let finalTranscript = ''; // 確定した(黒の)認識結果
-
-  recognition.onresult = (event) => {
-    let interimTranscript = ''; // 暫定(灰色)の認識結果
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      let transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript = transcript;
-      } else {
-        interimTranscript = transcript;
+  // CSRF対策
+  const getCookie = (name) => {
+    if (document.cookie && document.cookie !== '') {
+      for (const cookie of document.cookie.split(';')) {
+        const [key, value] = cookie.trim().split('=')
+        if (key === name) {
+          return decodeURIComponent(value)
+        }
       }
     }
-    resultDiv.innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</i>';
   }
+  const csrftoken = getCookie('csrftoken')
 
-  startBtn.onclick = () => {
-    recognition.start();
-  }
-  stopBtn.onclick = () => {
-    recognition.stop();
-  }
-</script>
-<center>
-  <button id="record" onclick="startRecordhing()">Record</button>
-  <button id="stop">
-    Stop
-  </button>
-  <a id="output window">{{data}}</a>
-</center>
-</br>
-※体験版では録音が一度に30秒までです。制限解除するにはサインアップしてください。と申しております。
+  // 記事追加
+  const addBlog = document.getElementById('add_blog')
+  addBlog.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const url = '{% url "add" %}'
+    const post_title = document.getElementById('post_title')
+    // URLのクエリパラメータを管理
+    const body = new URLSearchParams()
+    body.append('title', post_title.value)
 
-<script>
-  // for html
-  const recordLink = document.getElementById("record");
-  const downloadLink = document.getElementById("download");
-  const stopButton = document.getElementById("stop");
-  stopButton.setAttribute("disabled", "disabled");
-
-  // for audio
-  let audio_sample_rate = null;
-  let scriptProcessor = null;
-  let audioContext = null;
-
-  // audio data
-  let audioData = [];
-  let bufferSize = 1024;
-
-  let saveAudio = function () {
-    exportWAV(audioData);
-
-    audioContext.close().then(function () {
-      stopButton.setAttribute("disabled", "disabled");
-    });
-  };
-
-  // export WAV from audio float data
-  let exportWAV = function (audioData) {
-    let encodeWAV = function (samples, sampleRate) {
-      let buffer = new ArrayBuffer(44 + samples.length * 2);
-      let view = new DataView(buffer);
-
-      let writeString = function (view, offset, string) {
-        for (let i = 0; i < string.length; i++) {
-          view.setUint8(offset + i, string.charCodeAt(i));
-        }
-      };
-
-      let floatTo16BitPCM = function (output, offset, input) {
-        for (let i = 0; i < input.length; i++, offset += 2) {
-          let s = Math.max(-1, Math.min(1, input[i]));
-          output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-        }
-      };
-
-      writeString(view, 0, "RIFF"); // RIFFヘッダ
-      view.setUint32(4, 32 + samples.length * 2, true); // これ以降のファイルサイズ
-      writeString(view, 8, "WAVE"); // WAVEヘッダ
-      writeString(view, 12, "fmt "); // fmtチャンク
-      view.setUint32(16, 16, true); // fmtチャンクのバイト数
-      view.setUint16(20, 1, true); // フォーマットID
-      view.setUint16(22, 1, true); // チャンネル数
-      view.setUint32(24, sampleRate, true); // サンプリングレート
-      view.setUint32(28, sampleRate * 2, true); // データ速度
-      view.setUint16(32, 2, true); // ブロックサイズ
-      view.setUint16(34, 16, true); // サンプルあたりのビット数
-      writeString(view, 36, "data"); // dataチャンク
-      view.setUint32(40, samples.length * 2, true); // 波形データのバイト数
-      floatTo16BitPCM(view, 44, samples); // 波形データ
-
-      return view;
-    };
-
-    let mergeBuffers = function (audioData) {
-      let sampleLength = 0;
-      for (let i = 0; i < audioData.length; i++) {
-        sampleLength += audioData[i].length;
-      }
-      let samples = new Float32Array(sampleLength);
-      let sampleIdx = 0;
-      for (let i = 0; i < audioData.length; i++) {
-        for (let j = 0; j < audioData[i].length; j++) {
-          samples[sampleIdx] = audioData[i][j];
-          sampleIdx++;
-        }
-      }
-      return samples;
-    };
-
-    let dataview = encodeWAV(mergeBuffers(audioData), audio_sample_rate);
-    let audioBlob = new Blob([dataview], { type: "audio/wav" });
-
-    uploadURL = "./record/";
-    fetch(uploadURL, {
-      method: "POST",
+    fetch(url, {
+      method: 'POST',
+      body: body,
       headers: {
-        'Content-Type': 'application/json;charset=utf-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': csrftoken,
       },
-      cache: 'no-cache',
-      body: audioBlob,
     })
-    .then((resp) => {
-      if (resp.status === 200) {
-         window.location.reload(ture);
-        return resp.json();
-      } else {
-        console.log("error", resp);
-      }
+      .then((response) => {
+        // JSON形式に変換
+        return response.json()
+      })
+      .then((response) => {
+        // フォームをクリア
+        post_title.value = ''
+        // 追加するエレメント
+        const postArea = document.getElementById('posts')
+        const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
+        const element2 = Object.assign(document.createElement('div'), { className: 'card' })
+        const element3 = Object.assign(document.createElement('div'), {
+          className: 'card-body',
+          textContent: response.title,
+        })
+        element.appendChild(element2)
+        element2.appendChild(element3)
+        // 最後に追加
+        postArea.insertBefore(element, postArea.lastChild.nextSibling)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
+
+  // 記事検索
+  const searchBlog = document.getElementById('search_blog')
+  searchBlog.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const url = '{% url "search" %}'
+    const search_title = document.getElementById('search_title')
+    // URLのクエリパラメータを管理
+    const body = new URLSearchParams()
+    body.append('title', search_title.value)
+
+    fetch(url, {
+      method: 'POST',
+      body: body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': csrftoken,
+      },
     })
-    .then(resp => document.getElementById("output window").innerHTML = "【文字起こし結果】："+resp.data);
-
-    console.log(dataview);
-
-    let myURL = window.URL || window.webkitURL;
-    let url = myURL.createObjectURL(audioBlob);
-    return url;
-  };
-
-  // stop button
-  stopButton.addEventListener("click", function () {
-    saveAudio();
-    recordLink.removeAttribute("disabled");
-    console.log("saved wav");
-  });
-
-  // save audio data
-  var onAudioProcess = function (e) {
-    var input = e.inputBuffer.getChannelData(0);
-    var bufferData = new Float32Array(bufferSize);
-    for (var i = 0; i < bufferSize; i++) {
-      bufferData[i] = input[i];
-    }
-
-    audioData.push(bufferData);
-  };
-
-  // getusermedia
-  let handleSuccess = function (stream) {
-    audioContext = new AudioContext();
-    audio_sample_rate = audioContext.sampleRate;
-    console.log(audio_sample_rate);
-    scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
-    var mediastreamsource = audioContext.createMediaStreamSource(stream);
-    mediastreamsource.connect(scriptProcessor);
-    scriptProcessor.onaudioprocess = onAudioProcess;
-    scriptProcessor.connect(audioContext.destination);
-    recordLink.setAttribute("disabled", "disabled");
-    stopButton.removeAttribute("disabled");
-
-    console.log("record start?");
-
-    // when time passed without pushing the stop button
-    setTimeout(function () {
-      console.log("30 sec");
-      if (recordLink.disabled == ture) {
-        saveAudio();
-        console.log("saved audio");
-      }
-    }, 30000);
-  };
-
-  recordLink.addEventListener("click", function () {
-    // getUserMedia
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: false })
-      .then(handleSuccess);
-    console.log("saved wav");
-  });
+      .then((response) => {
+        // JSON形式に変換
+        return response.json()
+      })
+      .then((response) => {
+        // フォームをクリア
+        search_title.value = ''
+        // 検索するエレメント
+        const postArea = document.getElementById('posts')
+        postArea.innerHTML = ''
+        for (const title of response.title_list) {
+          const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
+          const element2 = Object.assign(document.createElement('div'), { className: 'card' })
+          const element3 = Object.assign(document.createElement('div'), {
+            className: 'card-body',
+            textContent: title,
+          })
+          element.appendChild(element2)
+          element2.appendChild(element3)
+          postArea.appendChild(element)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
 </script>
-
 {% endblock %}
   
 
