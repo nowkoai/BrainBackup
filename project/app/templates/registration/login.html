@@ -1,5 +1,10 @@
-{% extends "app/base.html" %} {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+ {% block content %}
+<head>
+    
+</head>
+
 <main>
     <div class="container">
         <h1>ログイン</h1>
@@ -11,8 +16,9 @@
     </div>
 </main>
 <div class="form-wrapper">
-   
-    <form>
+    <h1>ログイン</h1>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
       <div class="form-item">
         <label for="email"></label>
         <input type="email" name="email" required="required" placeholder="Email Address"></input>
