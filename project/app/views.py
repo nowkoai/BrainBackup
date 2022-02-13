@@ -1,9 +1,10 @@
 import re
 from django.shortcuts import render, redirect
-from django.http import request
+from django.http import request, JsonResponse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from django.views.generic import TemplateView, ListView,View
+from django.views.generic import TemplateView, ListView
 from .models import InputText
 from django.contrib.auth import login
 from .form import UserCreationForm
@@ -106,3 +107,22 @@ class RecordView(LoginRequiredMixin, TemplateView):
         return JsonResponse({'data': output})
 
 
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        blog_data = InputText.objects.all()
+        return render(request, 'app/index.html', {
+            'blog_data': blog_data,
+        })
+
+class AddView(View):
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get('title')
+
+        blog = InputText()
+        blog.title = title
+        blog.save()
+
+        data = {
+            'title': title,
+        }
+        return JsonResponse(data)
