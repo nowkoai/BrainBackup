@@ -21,13 +21,12 @@ def index(request):
 
 
 def home(request):
-    latest_data = ''
-    if InputText.objects.filter(
-            user=request.user).count() > 0:
-        latest_data = InputText.objects.filter(
-            user=request.user).latest('pub_date')
-    return render(request, 'app/home.html', {'data': "【文字起こし結果】:"+str(latest_data)})
-
+    template_name = "app/log.html"
+    def get(self, request, *args, **kwargs):
+        blog_data = InputText.objects.all()
+        return render(request, 'app/home.html', {
+            'blog_data': blog_data,
+        })
 
 def signup(request):
     if request.method == 'POST':
@@ -106,13 +105,6 @@ class RecordView(LoginRequiredMixin, TemplateView):
             input_text.save()
         return JsonResponse({'data': output})
 
-
-class IndexView(View):
-    def get(self, request, *args, **kwargs):
-        blog_data = InputText.objects.all()
-        return render(request, 'app/home.html', {
-            'blog_data': blog_data,
-        })
 
 class AddView(View):
     def post(self, request, *args, **kwargs):
