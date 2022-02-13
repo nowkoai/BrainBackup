@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import InputText, Relation
+from app.models import InputText, Relation, Blog
 from django import forms
 from .models import MyUser
 from django.contrib.auth.models import Group
@@ -9,7 +9,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 admin.site.register(InputText)
 admin.site.register(Relation)
-
+admin.site.register(Blog)
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
@@ -91,3 +91,5 @@ admin.site.register(MyUser, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+
+

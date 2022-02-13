@@ -110,7 +110,7 @@ class RecordView(LoginRequiredMixin, TemplateView):
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         blog_data = InputText.objects.all()
-        return render(request, 'app/index.html', {
+        return render(request, 'app/home.html', {
             'blog_data': blog_data,
         })
 
