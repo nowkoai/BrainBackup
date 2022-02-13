@@ -1,14 +1,12 @@
 import re
 from django.shortcuts import render, redirect
-from django.http import request, JsonResponse
+from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from django.views.generic import TemplateView, ListView
-from .models import InputText, Blog
+from .models import Blog
 from django.contrib.auth import login
 from .form import UserCreationForm
-from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
@@ -50,4 +48,19 @@ class AddView(View):
         }
         return JsonResponse(data)
 
+class SearchView(View):
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get('title')
+        blog_data = Blog.objects.all()
+        title_list = []
 
+        if title:
+            blog_data = blog_data.filter(title__icontains=title)
+
+        for blog in blog_data:
+            title_list.append(blog.title)
+
+        data = {
+            'title_list': title_list,
+        }
+        return JsonResponse(data)
