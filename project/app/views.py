@@ -105,12 +105,17 @@ class RecordView(LoginRequiredMixin, TemplateView):
             input_text.save()
         return JsonResponse({'data': output})
 
-
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        blog_data = Blog.objects.all()
+        return render(request, 'app/index.html', {
+            'blog_data': blog_data,
+        })
 class AddView(View):
     def post(self, request, *args, **kwargs):
         title = request.POST.get('title')
 
-        blog = InputText()
+        blog = Blog()
         blog.title = title
         blog.save()
 
@@ -118,3 +123,5 @@ class AddView(View):
             'title': title,
         }
         return JsonResponse(data)
+
+
