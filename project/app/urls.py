@@ -1,4 +1,4 @@
-from .views import RecordView, RecordTrialView, LogView, IndexView
+from .views import IndexView
 from django.urls import path
 from.import views
 
