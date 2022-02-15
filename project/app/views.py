@@ -9,8 +9,21 @@ from django.contrib.auth import login
 from .form import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog
+
+
+def index(request):
+    return render(request, 'app/index.html')
+
+
+def home(request):
+    latest_data = ''
+    if InputText.objects.filter(
+            user=request.user).count() > 0:
+        latest_data = InputText.objects.filter(
+            user=request.user).latest('pub_date')
+    return render(request, 'app/home.html', {'data':str(latest_data)})
 
 
 def signup(request):
@@ -19,7 +32,7 @@ def signup(request):
         if form.is_valid():
             user_instance = form.save()
             login(request, user_instance)
-            return redirect("app:home")
+            return redirect("app:index")
     else:
         form = UserCreationForm()
 
