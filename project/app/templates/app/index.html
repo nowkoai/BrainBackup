@@ -12,8 +12,6 @@
         <input class="form-control" type="text" id="post_title" required />
       </form>
     </div>
-
-    
   </div>
 </div>
 
@@ -49,7 +47,7 @@
   const addBlog = document.getElementById('add_blog')
   addBlog.addEventListener('submit', (e) => {
     e.preventDefault()
-    const url = '{% url "add" %}'
+    const url = '{% url "app:add" %}'
     const post_title = document.getElementById('post_title')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()
@@ -92,7 +90,7 @@
   const searchBlog = document.getElementById('search_blog')
   searchBlog.addEventListener('submit', (e) => {
     e.preventDefault()
-    const url = '{% url "search" %}'
+    const url = '{% url "app:search" %}'
     const search_title = document.getElementById('search_title')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()

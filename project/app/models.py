@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-# ユーザー認証
-from django.contrib.auth.models import User
+
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )

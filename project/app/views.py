@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from .models import Blog
+from .models import Blog, InputText
 from django.contrib.auth import login
 from .form import UserCreationForm
 from django.http import JsonResponse
@@ -14,7 +14,7 @@ from .models import Blog
 
 
 def index(request):
-    return render(request, 'app/index.html')
+    return render(request, 'app:index.html')
 
 
 def home(request):
