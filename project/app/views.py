@@ -16,16 +16,6 @@ from .models import Blog
 def index(request):
     return render(request, 'app:index.html')
 
-
-def home(request):
-    latest_data = ''
-    if InputText.objects.filter(
-            user=request.user).count() > 0:
-        latest_data = InputText.objects.filter(
-            user=request.user).latest('pub_date')
-    return render(request, 'app/home.html', {'data':str(latest_data)})
-
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
