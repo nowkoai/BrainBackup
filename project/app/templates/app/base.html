@@ -23,14 +23,17 @@
       <div class="container">
         <a class="navbar-brand" href="/">BrainBackup</a>
       </div>
+      {% if request.user.is_authenticated %}
       <div >
         <form id="search_blog">
           {% csrf_token %}
           <input class="form-control" type="text" id="search_title" />
         </form>
       </div>
+      <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+      {% endif %}
     </nav>
-
+    
     <main>
       <div class="container">{% block content %} {% endblock %}</div>
     </main>
