@@ -13,9 +13,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog
 
 
-def index(request):
-    return render(request, 'app:index.html')
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -32,13 +29,13 @@ def signup(request):
     return render(request, 'app/signup.html', context)
 
 
-class IndexView(View):
+class IndexView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
         blog_data = Blog.objects.all()
         return render(request, 'app/index.html', {
             'blog_data': blog_data,
         })
-class AddView(View):
+class AddView(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
         title = request.POST.get('title')
 
@@ -51,7 +48,7 @@ class AddView(View):
         }
         return JsonResponse(data)
 
-class SearchView(View):
+class SearchView(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
         title = request.POST.get('title')
         blog_data = Blog.objects.all()
