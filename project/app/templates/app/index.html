@@ -54,12 +54,13 @@ recognition.onresult = (event) => {
       interimTranscript = transcript;
     }
   }
-  post_title.value=finalTranscript + interimTranscript ;
-}
+  let input_text = finalTranscript;
+  let task_text = input_text.replace("をタスクに追加","");//タスクの文字を消す
+  post_title.value = task_text + interimTranscript;
 
-recognition.onspeechend = function() {
-  alert('onsoundend発火')
-  const url = '{% url "app:add" %}'
+  if(finalTranscript.endsWith('をタスクに追加')||finalTranscript.endsWith('な')){
+    //ここに追加する処理
+    const url = '{% url "app:add" %}'
     const post_title = document.getElementById('post_title')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()
@@ -92,11 +93,19 @@ recognition.onspeechend = function() {
         element2.appendChild(element3)
         // 最後に追加
         postArea.insertBefore(element, postArea.lastChild.nextSibling)
-      
+        
       })
       .catch((error) => {
         console.log(error)
       })
+      
+  }
+
+  
+}
+
+recognition.onspeechend = function() {
+  recognition.start();
 }
 
 //ページが読み込まれたら音声認識を開始
