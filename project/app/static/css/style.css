@@ -5,7 +5,7 @@
       }
       
       body {
-	background: #E9E9E9;
+	background: #b50707;
 	display: flex;
 	flex-flow: column;
 	min-height: 100vh;
@@ -16,7 +16,7 @@
       }
 
       /* チェックボックス01 */
-input[type=checkbox] {
+	input[type=checkbox] {
 	display: none;
     }
     .checkbox01 {
