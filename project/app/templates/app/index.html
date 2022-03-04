@@ -1,7 +1,8 @@
 {% extends "app/base.html" %} {% block content %}
-
 {% load static %}
-
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
 <!DOCTYPE html>
 <button id="start-btn">start</button>
 <button id="stop-btn">stop</button>
@@ -22,6 +23,8 @@
     {% for blog in blog_data %}
     <div class="col-4 mb-2">
       <div class="card">
+        <input type="checkbox" id="01-B" name="checkbox01">
+        <label for="01-B" class="checkbox01"></label>
         <div class="card-body">{{ blog.title }}</div>
       </div>
     </div>
