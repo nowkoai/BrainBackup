@@ -23,10 +23,8 @@
 <div class="my-2 text-center">
   <div class="row" id="posts">
     {% for blog in blog_data %}
-    <div class="col-4 mb-2">
+    <div class="col-12 mb-2">
       <div class="card">
-        <input type="checkbox" id="01-B" name="checkbox01">
-        <label for="01-B" class="checkbox01"></label>
         <div class="card-body">{{ blog.title }}</div>
       </div>
     </div>
@@ -88,7 +86,7 @@ recognition.onresult = (event) => {
         post_title.value = ''
         // 追加するエレメント
         const postArea = document.getElementById('posts')
-        const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
+        const element = Object.assign(document.createElement('div'), { className: 'col-12 mb-3' })
         const element2 = Object.assign(document.createElement('div'), { className: 'card' })
         const element3 = Object.assign(document.createElement('div'), {
           className: 'card-body',
