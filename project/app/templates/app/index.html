@@ -21,17 +21,12 @@
 </div>
 
 
-  
-  {% for blog in blog_data %}
-  
-  <div class="wrapper">
-
-    <input type="Checkbox" id="check">
-    <label for="check">{{ blog.title }}</label>
-  </div>
-  
-  {% endfor %}
-
+{% for blog in blog_data %}
+<div class="wrapper" id="posts">
+  <input type="checkbox" id="check">
+  <label for="check">{{ blog.title }}</label>
+</div>
+{% endfor %}
 
 {% endblock %} {% block extrajs %}
 <script>
