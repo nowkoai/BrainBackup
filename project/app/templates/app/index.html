@@ -19,13 +19,19 @@
     </div>
   </div>
 </div>
+
+
+  
+  {% for blog in blog_data %}
   
   <div class="wrapper">
-  {% for blog in blog_data %}
+
     <input type="Checkbox" id="check">
     <label for="check">{{ blog.title }}</label>
-  {% endfor %}
   </div>
+  
+  {% endfor %}
+
 
 {% endblock %} {% block extrajs %}
 <script>
