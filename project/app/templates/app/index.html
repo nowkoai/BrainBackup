@@ -19,18 +19,14 @@
     </div>
   </div>
 </div>
-
-<div class="my-2 text-center">
-  <div class="row" id="posts">
-    {% for blog in blog_data %}
-    <div class="col-12 mb-2">
-      <div class="card">
-        <div class="card-body">{{ blog.title }}</div>
-      </div>
-    </div>
-    {% endfor %}
+  
+  <div class="wrapper">
+  {% for blog in blog_data %}
+    <input type="Checkbox" id="check">
+    <label for="check">{{ blog.title }}</label>
+  {% endfor %}
   </div>
-</div>
+
 {% endblock %} {% block extrajs %}
 <script>
 const startBtn = document.querySelector('#start-btn');
