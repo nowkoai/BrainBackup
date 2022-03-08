@@ -79,7 +79,3 @@ input[type="checkbox"]:checked + label {
 	/* チェックされたチェックボックス直後の.labelのスタイル */
 	color: #bdbdbd;
 }
-input[type="checkbox"]:checked + .wrapper {
-	/* チェックされたチェックボックス直後の.labelのスタイル */
-	background-color: #a5a5a5;
-}
