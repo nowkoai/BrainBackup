@@ -22,9 +22,13 @@
 
 
 {% for blog in blog_data %}
-<div class="wrapper" id="posts">
-  <input type="checkbox" id="check">
-  <label for="check">{{ blog.title }}</label>
+<div class="wra">
+  <div class="wrap">
+    <div class="wrapper" id="posts">
+      <input type="checkbox" id="{{ blog.id }}">
+      <label for="{{ blog.id }}">{{ blog.title }}</label>
+    </div>
+  </div>
 </div>
 {% endfor %}
 
