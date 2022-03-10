@@ -76,8 +76,7 @@ class MyUser(AbstractBaseUser):
 
 class InputText(models.Model):
     text = models.TextField()
-    pub_date = models.DateTimeField(
-        default=timezone.now)
+    pub_date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

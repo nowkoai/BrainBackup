@@ -20,18 +20,18 @@
   </div>
 </div>
 
-
+<div class="posts" id="posts">
 {% for blog in blog_data %}
 <div class="wra">
   <div class="wrap">
-    <div class="wrapper" id="posts">
+    <div class="wrapper" >
       <input type="checkbox" id="{{ blog.id }}">
       <label for="{{ blog.id }}">{{ blog.title }}</label>
     </div>
   </div>
 </div>
 {% endfor %}
-
+</div>
 {% endblock %} {% block extrajs %}
 <script>
 const startBtn = document.querySelector('#start-btn');
@@ -87,14 +87,20 @@ recognition.onresult = (event) => {
         post_title.value = ''
         // 追加するエレメント
         const postArea = document.getElementById('posts')
-        const element = Object.assign(document.createElement('div'), { className: 'col-12 mb-3' })
-        const element2 = Object.assign(document.createElement('div'), { className: 'card' })
-        const element3 = Object.assign(document.createElement('div'), {
-          className: 'card-body',
-          textContent: response.title,
-        })
+        const element = Object.assign(document.createElement('div'), { className: 'wra' })
+        const element2 = Object.assign(document.createElement('div'), { className: 'wrap' })
+        const element3 = Object.assign(document.createElement('div'), { className: 'wrapper' })
+
+        const element4 = Object.assign(document.createElement('input'))
+        element4.id = "{{ blog.id }}"
+        element4.setAttribute('type','checkbox')
+        const element5 = Object.assign(document.createElement('label'), { textContent: response.title,})
+        element5.for="{{ blog.id }}"
+
         element.appendChild(element2)
         element2.appendChild(element3)
+        element3.appendChild(element4)
+        element3.appendChild(element5)
         // 最後に追加
         postArea.insertBefore(element, postArea.lastChild.nextSibling)
         
@@ -165,14 +171,20 @@ stopBtn.onclick = () => {
         post_title.value = ''
         // 追加するエレメント
         const postArea = document.getElementById('posts')
-        const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
-        const element2 = Object.assign(document.createElement('div'), { className: 'card' })
-        const element3 = Object.assign(document.createElement('div'), {
-          className: 'card-body',
-          textContent: response.title,
-        })
+        const element = Object.assign(document.createElement('div'), { className: 'wra' })
+        const element2 = Object.assign(document.createElement('div'), { className: 'wrap' })
+        const element3 = Object.assign(document.createElement('div'), { className: 'wrapper' })
+
+        const element4 = Object.assign(document.createElement('input'))
+        element4.id = "{{ blog.id }}"
+        element4.setAttribute('type','checkbox')
+        const element5 = Object.assign(document.createElement('label'), { textContent: response.title,})
+        element5.for="{{ blog.id }}"
+
         element.appendChild(element2)
         element2.appendChild(element3)
+        element3.appendChild(element4)
+        element3.appendChild(element5)
         // 最後に追加
         postArea.insertBefore(element, postArea.lastChild.nextSibling)
       })
@@ -212,10 +224,7 @@ stopBtn.onclick = () => {
         for (const title of response.title_list) {
           const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
           const element2 = Object.assign(document.createElement('div'), { className: 'card' })
-          const element3 = Object.assign(document.createElement('div'), {
-            className: 'card-body',
-            textContent: title,
-          })
+          const element3 = Object.assign(document.createElement('div'), { className: 'card-body',textContent: title,})
           element.appendChild(element2)
           element2.appendChild(element3)
           postArea.appendChild(element)
