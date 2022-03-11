@@ -9,28 +9,28 @@
 <button id="start-btn">start</button>
 <button id="stop-btn">stop</button>
 
-<div class="my-4 text-center">
-  <div class="row">
-    <div class="col-md-12 mb-2">
-      <form id="add_blog">
-        {% csrf_token %}
-        <input class="form-control" type="text" id="post_title" required />
-      </form>
-    </div>
-  </div>
-</div>
-
 <div class="posts" id="posts">
-{% for blog in blog_data %}
+{% for neuron in neuron_data %}
 <div class="wra">
   <div class="wrap">
     <div class="wrapper" >
-      <input type="checkbox" id="{{ blog.id }}">
-      <label for="{{ blog.id }}">{{ blog.title }}</label>
+      <input type="checkbox" id="{{ neuron.id }}">
+      <label for="{{ neuron.id }}">{{ neuron.text }}</label>
     </div>
   </div>
 </div>
 {% endfor %}
+</div>
+
+<div class="my-2 text-center">
+  <div class="row">
+    <div class="col-md-5 mb-2">
+      <form id="add_neuron">
+        {% csrf_token %}
+        <input class="form-control" type="text" id="post_text" required />
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %} {% block extrajs %}
 <script>
@@ -60,15 +60,15 @@ recognition.onresult = (event) => {
   }
   let input_text = finalTranscript;
   let task_text = input_text.replace("をタスクに追加","");//タスクの文字を消す
-  post_title.value = task_text + interimTranscript;
+  post_text.value = task_text + interimTranscript;
 
   if(finalTranscript.endsWith('をタスクに追加')||finalTranscript.endsWith('な')){
     //ここに追加する処理
     const url = '{% url "app:add" %}'
-    const post_title = document.getElementById('post_title')
+    const post_text = document.getElementById('post_text')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()
-    body.append('title', post_title.value)
+    body.append('text', post_text.value)
 
     fetch(url, {
       method: 'POST',
@@ -84,19 +84,18 @@ recognition.onresult = (event) => {
       })
       .then((response) => {
         // フォームをクリア
-        post_title.value = ''
+        post_text.value = ''
         // 追加するエレメント
-        const postArea = document.getElementById('posts')
-        const element = Object.assign(document.createElement('div'), { className: 'wra' })
-        const element2 = Object.assign(document.createElement('div'), { className: 'wrap' })
-        const element3 = Object.assign(document.createElement('div'), { className: 'wrapper' })
+        const postArea = document.getElementById('posts');
+        const element = Object.assign(document.createElement('div'), { className: 'wra' });
+        const element2 = Object.assign(document.createElement('div'), { className: 'wrap' });
+        const element3 = Object.assign(document.createElement('div'), { className: 'wrapper' });
 
         const element4 = Object.assign(document.createElement('input'))
-        element4.id = "{{ blog.id }}"
+        element4.setAttribute('id', 'new');
         element4.setAttribute('type','checkbox')
-        const element5 = Object.assign(document.createElement('label'), { textContent: response.title,})
-        element5.for="{{ blog.id }}"
-
+        const element5 = Object.assign(document.createElement('label'), { textContent: response.text,})
+        element5.htmlFor = 'new';
         element.appendChild(element2)
         element2.appendChild(element3)
         element3.appendChild(element4)
@@ -105,6 +104,7 @@ recognition.onresult = (event) => {
         postArea.insertBefore(element, postArea.lastChild.nextSibling)
         
       })
+      
       .catch((error) => {
         console.log(error)
       })
@@ -145,14 +145,14 @@ stopBtn.onclick = () => {
   const csrftoken = getCookie('csrftoken')
 
   // 記事追加キーボードバージョン
-  const addBlog = document.getElementById('add_blog')
-  addBlog.addEventListener('submit', (e) => {
+  const addNeuron = document.getElementById('add_neuron')
+  addNeuron.addEventListener('submit', (e) => {
     e.preventDefault()
     const url = '{% url "app:add" %}'
-    const post_title = document.getElementById('post_title')
+    const post_text = document.getElementById('post_text')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()
-    body.append('title', post_title.value)
+    body.append('text', post_text.value)
 
     fetch(url, {
       method: 'POST',
@@ -168,7 +168,7 @@ stopBtn.onclick = () => {
       })
       .then((response) => {
         // フォームをクリア
-        post_title.value = ''
+        post_text.value = ''
         // 追加するエレメント
         const postArea = document.getElementById('posts')
         const element = Object.assign(document.createElement('div'), { className: 'wra' })
@@ -176,10 +176,10 @@ stopBtn.onclick = () => {
         const element3 = Object.assign(document.createElement('div'), { className: 'wrapper' })
 
         const element4 = Object.assign(document.createElement('input'))
-        element4.id = "{{ blog.id }}"
-        element4.setAttribute('type','checkbox')
-        const element5 = Object.assign(document.createElement('label'), { textContent: response.title,})
-        element5.for="{{ blog.id }}"
+          element4.id = "{{ neuron.id }}"
+          element4.setAttribute('type','checkbox')
+        const element5 = Object.assign(document.createElement('label'), { textContent: response.text,})
+          element5.for="{{ neuron.id }}"
 
         element.appendChild(element2)
         element2.appendChild(element3)
@@ -194,14 +194,14 @@ stopBtn.onclick = () => {
   })
 
   // 記事検索
-  const searchBlog = document.getElementById('search_blog')
-  searchBlog.addEventListener('submit', (e) => {
+  const searchNeuron = document.getElementById('search_neuron')
+  searchNeuron.addEventListener('submit', (e) => {
     e.preventDefault()
     const url = '{% url "app:search" %}'
-    const search_title = document.getElementById('search_title')
+    const search_text = document.getElementById('search_text')
     // URLのクエリパラメータを管理
     const body = new URLSearchParams()
-    body.append('title', search_title.value)
+    body.append('text', search_text.value)
 
     fetch(url, {
       method: 'POST',
@@ -217,14 +217,14 @@ stopBtn.onclick = () => {
       })
       .then((response) => {
         // フォームをクリア
-        search_title.value = ''
+        search_text.value = ''
         // 検索するエレメント
         const postArea = document.getElementById('posts')
         postArea.innerHTML = ''
-        for (const title of response.title_list) {
+        for (const text of response.text_list) {
           const element = Object.assign(document.createElement('div'), { className: 'col-4 mb-3' })
           const element2 = Object.assign(document.createElement('div'), { className: 'card' })
-          const element3 = Object.assign(document.createElement('div'), { className: 'card-body',textContent: title,})
+          const element3 = Object.assign(document.createElement('div'), { className: 'card-body',textContent: text,})
           element.appendChild(element2)
           element2.appendChild(element3)
           postArea.appendChild(element)
@@ -234,5 +234,6 @@ stopBtn.onclick = () => {
         console.log(error)
       })
   })
+
 </script>
 {% endblock %}

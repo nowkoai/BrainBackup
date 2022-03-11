@@ -4,13 +4,13 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from .models import Blog, InputText
+from .models import Neuron, Synapse
 from django.contrib.auth import login
 from .form import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Blog
+from .models import Neuron
 
 
 def signup(request):
@@ -31,36 +31,36 @@ def signup(request):
 
 class IndexView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
-        blog_data = Blog.objects.all()
+        neuron_data = Neuron.objects.all()
         return render(request, 'app/index.html', {
-            'blog_data': blog_data,
+            'neuron_data': neuron_data,
         })
 class AddView(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
-        title = request.POST.get('title')
+        text = request.POST.get('text')
 
-        blog = Blog()
-        blog.title = title
-        blog.save()
+        neuron = Neuron()
+        neuron.text = text
+        neuron.save()
 
         data = {
-            'title': title,
+            'text': text,
         }
         return JsonResponse(data)
 
 class SearchView(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
-        title = request.POST.get('title')
-        blog_data = Blog.objects.all()
-        title_list = []
+        text = request.POST.get('text')
+        neuron_data = Neuron.objects.all()
+        text_list = []
 
-        if title:
-            blog_data = blog_data.filter(title__icontains=title)
+        if text:
+            neuron_data = neuron_data.filter(text__icontains=text)
 
-        for blog in blog_data:
-            title_list.append(blog.title)
+        for neuron in neuron_data:
+            text_list.append(neuron.text)
 
         data = {
-            'title_list': title_list,
+            'text_list': text_list,
         }
         return JsonResponse(data)

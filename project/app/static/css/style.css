@@ -10,6 +10,9 @@ body {
 	min-height: 100vh;
 }
 
+.posts{
+	margin-top: 40px;
+}
 .wrap{
 	display: inline-block;
 }
@@ -79,3 +82,4 @@ input[type="checkbox"]:checked + label {
 	/* チェックされたチェックボックス直後の.labelのスタイル */
 	color: #bdbdbd;
 }
+
