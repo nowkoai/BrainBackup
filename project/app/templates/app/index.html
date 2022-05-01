@@ -1,28 +1,9 @@
-{% extends "app/base.html" %} {% load static %}
+{% extends "base.html" %} {% load static %}
 {% block content %}
 <!DOCTYPE html>
 <head>
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
-
-<div class="posts" id="posts">
-{% for neuron in neuron_data %}
-<div class="wra">
-  <div class="wrap">
-    <div class="wrapper" >
-      <input type="checkbox" id="{{ neuron.id }}">
-      <label for="{{ neuron.id }}">{{ neuron.text }}</label>
-    </div>
-  </div>
-</div>
-{% endfor %}
-</div>
-
-<form id="add_neuron">
-  {% csrf_token %}
-  <input class="form-control" type="text" id="post_text" required />
-  <button class="btn btn-primary mt-2" type="submit">送信</button>
-</form>
 
 <!--ここからtodoapp-->
 <div id="app">
@@ -63,6 +44,6 @@
 
 </div>
 <script>
-  const URL = '{% url "task_list" %}';
+  const URL = '{% url "index" %}';
 </script>
 {% endblock %} 

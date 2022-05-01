@@ -6,11 +6,21 @@ from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
 from .models import Neuron, Synapse
 from django.contrib.auth import login
-from .form import UserCreationForm
+from .forms import UserCreationForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Neuron
+
+import json
+from django.forms import model_to_dict #No
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.views.generic import View
+
+from .forms import TaskForm #No
+from .models import Task
+
 
 
 def signup(request):
@@ -27,40 +37,45 @@ def signup(request):
         "form": form
     }
     return render(request, 'app/signup.html', context)
+class TaskView(View):#No
+    def get(self, request):
+        # リクエストがjson形式のとき
+        if request.headers.get("Content-Type") == "application/json":
+            # すべてのtaskを辞書型で受け取る
+            tasks = Task.objects.values()
+            tasks_list = list(tasks)
+            # json形式でレスポンスを返す
+            return JsonResponse(tasks_list, safe=False, status=200)
+        return render(request, "index.html")
 
+    def post(self, request):
+        # json文字列を辞書型にし、pythonで扱えるようにする。
+        task = json.loads(request.body)
+        form = TaskForm(task)
 
-class IndexView(LoginRequiredMixin,View):
-    def get(self, request, *args, **kwargs):
-        neuron_data = Neuron.objects.all()
-        return render(request, 'app/index.html', {
-            'neuron_data': neuron_data,
-        })
-class AddView(LoginRequiredMixin,View):
-    def post(self, request, *args, **kwargs):
-        text = request.POST.get('text')
+        # データが正しければ保存する。
+        if form.is_valid():
+            new_task = form.save()
+            return JsonResponse({"task": model_to_dict(new_task)}, status=200)
+        return redirect("index_url")
 
-        neuron = Neuron()
-        neuron.text = text
-        neuron.save()
+    def put(self, request):
+        response = json.loads(request.body)
+        # dbの中から、同じidのtaskを取得する。
+        task = Task.objects.get(id=response.get("id"))
+        # タスクが完了していたら、未完了に、
+        # タスクが未完了なら、完了にする
+        if task.completed:
+            task.completed = False
+        else:
+            task.completed = True
+        # 更新した内容を保存する。
+        task.save()
+        return JsonResponse(model_to_dict(task))
 
-        data = {
-            'text': text,
-        }
-        return JsonResponse(data)
-
-class SearchView(LoginRequiredMixin,View):
-    def post(self, request, *args, **kwargs):
-        text = request.POST.get('text')
-        neuron_data = Neuron.objects.all()
-        text_list = []
-
-        if text:
-            neuron_data = neuron_data.filter(text__icontains=text)
-
-        for neuron in neuron_data:
-            text_list.append(neuron.text)
-
-        data = {
-            'text_list': text_list,
-        }
-        return JsonResponse(data)
+    def delete(self, request):
+        response = json.loads(request.body)
+        task = Task.objects.get(id=response.get("id"))
+        # タスクを削除する
+        task.delete()
+        return JsonResponse({"result": "Ok"})
