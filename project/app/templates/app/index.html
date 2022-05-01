@@ -1,10 +1,9 @@
 {% extends "app/base.html" %} {% load static %}
 {% block content %}
-
+<!DOCTYPE html>
 <head>
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
-<!DOCTYPE html>
 
 <div class="posts" id="posts">
 {% for neuron in neuron_data %}
@@ -21,7 +20,8 @@
 
 <form id="add_neuron">
   {% csrf_token %}
-  <input class="form-control" type="text" id="post_text">
+  <input class="form-control" type="text" id="post_text" required />
+  <button class="btn btn-primary mt-2" type="submit">送信</button>
 </form>
 
 {% endblock %} 
