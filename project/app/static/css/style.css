@@ -99,14 +99,10 @@ input[type="checkbox"]:checked + label {
 h1{
 	letter-spacing: 12px;
 	margin-top: 2vh;
+	padding-top: 2vh;
 	font-size:25px;
-}
-
-.bar{
-	background-color: #353535;
-	height: 5px;
-	width: 10%;
-	margin-top: 12vh;
+	border-top: 4px solid #353535;
+	margin-top: 16vh;
 }
 .nav-link{
 	margin-top: auto;
