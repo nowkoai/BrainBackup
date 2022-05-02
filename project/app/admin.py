@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Neuron,Synapse
+from app.models import Neuron,Synapse,Task
 from django import forms
 from .models import MyUser
 from django.contrib.auth.models import Group
@@ -9,7 +9,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 admin.site.register(Neuron)
 admin.site.register(Synapse)
-
+admin.site.register(Task)
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""

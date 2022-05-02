@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
-from .models import Neuron, Synapse
+from .models import Neuron, Synapse,Task
 from django.contrib.auth import login
 from .forms import UserCreationForm
 from django.http import JsonResponse
@@ -18,10 +18,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import View
 
-from .forms import TaskForm #No
+from .forms import TaskForm
 from .models import Task
-
-
 
 def signup(request):
     if request.method == 'POST':
@@ -37,7 +35,7 @@ def signup(request):
         "form": form
     }
     return render(request, 'app/signup.html', context)
-class TaskView(View):#No
+class TaskView(View):
     def get(self, request):
         # リクエストがjson形式のとき
         if request.headers.get("Content-Type") == "application/json":
@@ -46,7 +44,7 @@ class TaskView(View):#No
             tasks_list = list(tasks)
             # json形式でレスポンスを返す
             return JsonResponse(tasks_list, safe=False, status=200)
-        return render(request, "index.html")
+        return render(request, "app/index.html")
 
     def post(self, request):
         # json文字列を辞書型にし、pythonで扱えるようにする。
@@ -57,7 +55,7 @@ class TaskView(View):#No
         if form.is_valid():
             new_task = form.save()
             return JsonResponse({"task": model_to_dict(new_task)}, status=200)
-        return redirect("index_url")
+        return redirect("app:index")
 
     def put(self, request):
         response = json.loads(request.body)

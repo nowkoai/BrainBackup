@@ -9,6 +9,7 @@ body {
 	background-color: #e8e8e8;
 	min-height: 100vh;
 	display: flex;
+
 }
 
 .posts{
@@ -133,4 +134,11 @@ h1{
  
 .square_btn::after {
   transform: translate(-50%,-50%) rotate(-45deg);
+}
+
+#app{
+	width: 100%;
+}
+.close{
+	float: right;
 }
