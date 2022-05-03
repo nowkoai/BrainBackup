@@ -19,10 +19,12 @@ body {
 .wrap{
 	display: inline-block;
 	margin-top: 2vh;
+	width: 100%;
 }
 .wrapper{
 	background-color: #E9E9E9;
 	height: 50px;
+	width: 80%;
 	position: relative;
 	display: flex;
 	align-items:center;
@@ -136,5 +138,5 @@ h1{
 	width: 100%;
 }
 .close{
-	float: right;
+	margin-left: auto;
 }
