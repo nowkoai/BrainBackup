@@ -1,3 +1,6 @@
+const resultDiv = document.querySelector('#post_text');
+
+
 SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
 let recognition = new SpeechRecognition();
 
@@ -24,6 +27,7 @@ recognition.onresult = (event) => {
 
   if(finalTranscript.endsWith('をタスクに追加')||finalTranscript.endsWith('な')){
     //タスクを追加する処理
+
   }
 }
 

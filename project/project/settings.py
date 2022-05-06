@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'widget_tweaks', # from Fetch sample
+    'widget_tweaks',
+    'speech_recognition',
 ]
 
 MIDDLEWARE = [

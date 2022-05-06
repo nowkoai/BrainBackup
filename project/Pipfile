@@ -19,6 +19,7 @@ urllib3 = "==1.26.8"
 whitenoise = "==5.3.0"
 Django = "==4.0.1"
 SpeechRecognition = "==3.8.1"
+stripe = "*"
 
 [dev-packages]
 
