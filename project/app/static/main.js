@@ -1,6 +1,5 @@
 const resultDiv = document.querySelector('#post_text');
 
-
 SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
 let recognition = new SpeechRecognition();
 

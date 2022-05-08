@@ -1,3 +1,4 @@
+import genericpath
 import re
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -6,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import speech_recognition as sr
 from .models import Neuron, Synapse,Task
 from django.contrib.auth import login
-from .forms import UserCreationForm
+from .forms import UserCreationForm, TaskForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,12 +15,7 @@ from .models import Neuron
 
 import json
 from django.forms import model_to_dict #No
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
 from django.views.generic import View
-
-from .forms import TaskForm
-from .models import Task
 
 def signup(request):
     if request.method == 'POST':
@@ -27,7 +23,7 @@ def signup(request):
         if form.is_valid():
             user_instance = form.save()
             login(request, user_instance)
-            return redirect("app/index")
+            return redirect("app/login")
     else:
         form = UserCreationForm()
 

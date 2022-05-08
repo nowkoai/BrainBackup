@@ -7,7 +7,7 @@
 
 <div id="app">
   <div class="content">
-    <div class="posts">
+    <div class="posts" v-if="tasks.length">
       <div class="wra" v-for="task, index in tasks">
         <div class="wrap">
           <div class="wrapper">
