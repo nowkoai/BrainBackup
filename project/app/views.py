@@ -27,7 +27,7 @@ def signup(request):
         if form.is_valid():
             user_instance = form.save()
             login(request, user_instance)
-            return redirect("app:index")
+            return redirect("app/index")
     else:
         form = UserCreationForm()
 
