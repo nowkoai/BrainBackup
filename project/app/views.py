@@ -31,7 +31,7 @@ def signup(request):
         "form": form
     }
     return render(request, 'app/signup.html', context)
-class TaskView(View):
+class TaskView(LoginRequiredMixin,View):
     def get(self, request):
         # リクエストがjson形式のとき
         if request.headers.get("Content-Type") == "application/json":

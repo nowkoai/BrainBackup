@@ -3,28 +3,28 @@
 	padding: 0;
 	box-sizing: border-box;
 	color: #383838;
+	width: 100%;
 }
       
 body {
 	background-color: #e8e8e8;
 	min-height: 100vh;
-	display: flex;
-
 }
 
-.posts{
-	margin-top: 40px;
-	margin-top: 14vh;
+.main{
+	display: flex;
+	width: 100%;
+}
+.content{
+	margin-left: 6%;
 }
 .wrap{
 	display: inline-block;
 	margin-top: 2vh;
-	width: 100%;
 }
 .wrapper{
 	background-color: #E9E9E9;
 	height: 50px;
-	width: 70%;
 	position: relative;
 	display: flex;
 	align-items:center;
@@ -35,11 +35,10 @@ body {
 
 
 input[type="checkbox"]{
-	margin-left: 20px;
 	appearance: none;
 	-webkit-appearance: none;
-	height: 36px;
-	width: 36px;
+	height: 32px;
+	width: 32px;
 	border: 3px solid;
 	border-color: #5e5e5e;
 	border-radius: 4px;
@@ -90,10 +89,8 @@ input[type="checkbox"]:checked + label {
 	flex-direction: row;
 }
 
-
-
 .navbar{
-	width: 30vw;
+	width: 20%;
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
@@ -103,45 +100,43 @@ input[type="checkbox"]:checked + label {
 	-ms-writing-mode: tb-rl;
 	writing-mode: vertical-rl;
 	align-items: flex-start;
+	width: 100%;
 }
 h1{
 	letter-spacing: 12px;
-	margin-top: 2vh;
-	padding-top: 2vh;
+	margin-left:2vh;
 	font-size:25px;
 	border-top: 4px solid #353535;
-	margin-top: 16vh;
+	width: fit-content;
+	text-align: center;
+	padding-top:2vh ;
 }
 .nav-link{
 	margin-top: auto;
 }
 .square_btn {
-  display: block;
-  position: relative;
-  width: 30px;
-  height: 30px;
+	display: block;
+	position: relative;
+	width: 30px;
+	height: 30px;
 }
  
 .square_btn::before, .square_btn::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1px; /* 棒の幅（太さ） */
-  height: 32px; /* 棒の高さ */
-  background: #383838; /* バツ印の色 */
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 1px; /* 棒の幅（太さ） */
+	height: 32px; /* 棒の高さ */
+	background: #383838; /* バツ印の色 */
 }
  
 .square_btn::before {
-  transform: translate(-50%,-50%) rotate(45deg);
+  	transform: translate(-50%,-50%) rotate(45deg);
 }
  
 .square_btn::after {
-  transform: translate(-50%,-50%) rotate(-45deg);
-}
-
-#app{
-	width: 100%;
+  	transform: translate(-50%,-50%) rotate(-45deg);
 }
 
 input[type="text"]{
@@ -150,4 +145,14 @@ input[type="text"]{
 	margin-left: 1vh;
 	height: 3vh;
 	width: 70%;
+}
+
+.header-menu{
+	padding: 20px 0px;
+	margin-bottom: 6vh;
+
+}
+.menu{
+	text-align: right;
+	padding: 10px 30px;
 }

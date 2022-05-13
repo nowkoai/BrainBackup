@@ -6,37 +6,48 @@
 </head>
 
 <div id="app">
-  <div class="content">
-    <div class="posts" v-if="tasks.length">
-      <div class="wra" v-for="task, index in tasks">
-        <div class="wrap">
-          <div class="wrapper">
-            <input type="checkbox" v-model="task.completed" v-on:change="updateTask(task)">
-            <label :class="{'completed': task.completed}">
-              [[ task.title ]]
-            </label>
-            <button type="button" class="close" v-if="task.completed==true"
-            @click="deleteTask(task)">
-                <span>&times;</span>
-            </button>
+  <div id="header">
+    <ul class="header-menu">
+      <div class="menu">三</div>
+    </ul>
+  </div>
+  <div class="main">
+    <nav class="navbar" >
+      <div class="navbar-container"><h1>わたしの働き方</h1></div>
+      <a class="nav-link" href="{% url 'logout' %}"><span class="square_btn"></span></a>
+    </nav>
+    <div class="content">
+      <div class="posts" v-if="tasks.length">
+        <div class="wra" v-for="task, index in tasks">
+          <div class="wrap">
+            <div class="wrapper">
+              <input type="checkbox" v-model="task.completed" v-on:change="updateTask(task)">
+              <label :class="{'completed': task.completed}">
+                [[ task.title ]]
+              </label>
+              <button type="button" class="close" v-if="task.completed==true"
+              @click="deleteTask(task)">
+                  <span>&times;</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <form name="myform" @submit.prevent="createTask">
+        <div class="form">
+          <div class="wra">
+            <div class="wrap">
+              <div class="wrapper">
+                <input type="checkbox">
+                <input type="text" name="mytext" id="post_text" v-model="task.title" placeholder="ここに入力">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-
-  <form @submit.prevent="createTask">
-    <div class="form">
-      <div class="wra">
-        <div class="wrap">
-          <div class="wrapper">
-            <input type="checkbox">
-            <input type="text" id="post_text" v-model="task.title" placeholder="ここに入力">
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
+</div>
 </div>
 <script>
   const URL = '{% url "app:index" %}';

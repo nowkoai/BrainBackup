@@ -20,16 +20,14 @@ recognition.onresult = (event) => {
       interimTranscript = transcript;
     }
   }
-  let input_text = finalTranscript;
-  let task_text = input_text.replace("をタスクに追加","");//タスクの文字を消す
-  post_text.value = task_text + interimTranscript;
+  post_text.value =interimTranscript + finalTranscript;
 
-  if(finalTranscript.endsWith('をタスクに追加')||finalTranscript.endsWith('な')){
+  if(finalTranscript.endsWith('な')||finalTranscript.endsWith('ね')){
     //タスクを追加する処理
-
+    console.log(post_text.value)
+	this.createTask()
   }
 }
-
 //ページが読み込まれたら音声認識を開始
 recognition.start();
 
@@ -48,8 +46,7 @@ const getCookie = (name) => {
 }
 const csrftoken = getCookie('csrftoken')
 
-//ここからtodoapp
-
+//ここからVue
 const App = {
 	data() {
 	  return {
