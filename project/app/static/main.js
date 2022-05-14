@@ -25,7 +25,7 @@ recognition.onresult = (event) => {
   if(finalTranscript.endsWith('な')||finalTranscript.endsWith('ね')){
     //タスクを追加する処理
     console.log(post_text.value)
-	this.createTask()
+
   }
 }
 //ページが読み込まれたら音声認識を開始

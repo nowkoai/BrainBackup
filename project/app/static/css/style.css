@@ -18,10 +18,7 @@ body {
 .content{
 	margin-left: 6%;
 }
-.wrap{
-	display: inline-block;
-	margin-top: 2vh;
-}
+
 .wrapper{
 	background-color: #E9E9E9;
 	height: 50px;
