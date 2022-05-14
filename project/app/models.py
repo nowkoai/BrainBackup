@@ -103,7 +103,9 @@ class Task(models.Model):
     created_at = models.DateField(auto_now_add=True)
     ## taskが完了したかどうか
     completed = models.BooleanField(default=False)
-
+    ## インデント
+    indent = models.IntegerField(default=0)
+    
     def __str__(self):
         return self.title
 

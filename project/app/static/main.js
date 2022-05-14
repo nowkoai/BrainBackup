@@ -51,6 +51,7 @@ const App = {
 	data() {
 	  return {
 	    task: {title: ''},
+	    task: {indent:''},
 	    tasks:['HTMLより'],
 	  }
 	  },
@@ -112,6 +113,14 @@ const App = {
 	created() {
 	  	this.getTasks();
 	},
+
+	onInput(e, task) {
+		item.value = e.target.innerText;
+	},
+	onTab(task, index) {
+		task.indent++;
+	}
+
       },
 }
 Vue.createApp(App).mount('#app')

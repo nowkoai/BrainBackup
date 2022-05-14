@@ -18,26 +18,21 @@
     </nav>
     <div class="content">
       <div class="posts" v-if="tasks.length">
-        <div class="wrapper" v-for="task, index in tasks">
-              <input type="checkbox" v-model="task.completed" v-on:change="updateTask(task)">
-              <label :class="{'completed': task.completed}">
-                [[ task.title ]]
-              </label>
-              <button type="button" class="close" v-if="task.completed==true"
-              @click="deleteTask(task)">
-                  <span>&times;</span>
-              </button>
+        <div class="wrapper" v-for="task, index in tasks" :style="{marginLeft: (task.indent * 40) + 'px'}">
+          <input type="checkbox" v-model="task.completed" v-on:change="updateTask(task)">
+          <input type="text" :class="{'completed': task.completed}" v-model="task.title" @input="onInput($event,task)"
+          @keydown.tab.exact.prevent="onTab(task, index)">
+          <button type="button" class="close" v-if="task.completed==true"
+          @click="deleteTask(task)">
+              <span>&times;</span>
+          </button>
         </div>
       </div>
       <form name="myform" @submit.prevent="createTask">
         <div class="form">
-          <div class="wra">
-            <div class="wrap">
-              <div class="wrapper">
-                <input type="checkbox">
-                <input type="text" name="mytext" id="post_text" v-model="task.title" placeholder="ここに入力">
-              </div>
-            </div>
+          <div class="wrapper">
+            <input type="checkbox">
+            <input type="text" name="mytext" id="post_text" v-model="task.title" placeholder="ここに入力">
           </div>
         </div>
       </form>

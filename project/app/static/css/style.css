@@ -30,7 +30,6 @@ body {
 	border-radius: 5px;
 }
 
-
 input[type="checkbox"]{
 	appearance: none;
 	-webkit-appearance: none;
@@ -75,7 +74,7 @@ input[type="checkbox"]:checked:after{
 	display: block;
 }
 .close{
-	margin-left:auto;
+	width: 100px;
 }
 
 
@@ -152,4 +151,8 @@ input[type="text"]{
 .menu{
 	text-align: right;
 	padding: 10px 30px;
+}
+
+.relative{
+	width: 200px;
 }
