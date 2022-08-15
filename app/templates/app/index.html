@@ -20,7 +20,7 @@
       <div class="posts" v-if="tasks.length">
         <div class="wrapper" v-for="task, index in tasks" :style="{marginLeft: (task.indent * 40) + 'px'}">
           <input type="checkbox" v-model="task.completed" v-on:change="updateTask(task)">
-          <input type="text" :class="{'completed': task.completed}" v-model="task.title" @input="onInput($event,task)"
+          <input type="text" v-model="task.title" @input="onInput($event,task)"
           @keydown.tab.exact.prevent="onTab(task, index)">
           <button type="button" class="close" v-if="task.completed==true"
           @click="deleteTask(task)">
