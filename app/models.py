@@ -74,6 +74,28 @@ class MyUser(AbstractBaseUser):
         return self.is_admin
 
 
+
+
+class Neuron(models.Model):
+    STATUS_CHOICES = [(1, '未完了'),(2, '作業中'),(3, '完了')]
+    
+    text = models.TextField()
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
+    pub_date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.text
+
+class Synapse(models.Model):
+    parent_text_id = models.TextField()
+    child_text_id = models.TextField()
+    neuron = models.ForeignKey( Neuron, on_delete=models.CASCADE, null=True )
+
+    def __str__(self):
+        return self.text
+
+
 class Task(models.Model):
     ## taskのタイトル
     title = models.CharField(max_length=255)
