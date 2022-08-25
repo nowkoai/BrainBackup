@@ -10,9 +10,8 @@
     <form method="post">
       {% csrf_token %}
       <div class="email">{{ form.email }}</div>
-      
-      {{ form.date_of_birth }}
-      {{ form.password }}
+      <div class="date_of_birth">{{ form.date_of_birth }}</div>
+      <div class="password">{{ form.password }}</div>
       <button type="submit" class="signup_btn">登録</button>
     </form>
 </div>
