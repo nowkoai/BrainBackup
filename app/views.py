@@ -30,7 +30,7 @@ def signup(request):
     context = {
         "form": form
     }
-    return render(request, 'app/signup.html', context)
+    return render(request, 'app/index.html', context)
 class TaskView(LoginRequiredMixin,View):
     def get(self, request):
         # リクエストがjson形式のとき
