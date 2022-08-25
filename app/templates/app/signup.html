@@ -1,10 +1,11 @@
 {% extends 'app/base.html' %} {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
 
 <div class="signup_container">
     <h1>サインアップ</h1>
     <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ form.email }}
       <button type="submit" class="signup_btn">登録</button>
     </form>
 </div>
