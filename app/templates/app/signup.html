@@ -9,7 +9,8 @@
     <h1>サインアップ</h1>
     <form method="post">
       {% csrf_token %}
-      {{ form.email }}
+      <div class="email">{{ form.email }}</div>
+      
       {{ form.date_of_birth }}
       {{ form.password }}
       <button type="submit" class="signup_btn">登録</button>
