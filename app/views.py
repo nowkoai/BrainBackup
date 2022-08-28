@@ -36,7 +36,7 @@ class TaskView(LoginRequiredMixin,View):
         # リクエストがjson形式のとき
         if request.headers.get("Content-Type") == "application/json":
             # すべてのtaskを辞書型で受け取る
-            tasks = Task.objects.objects.all().order_by('-id').values()
+            tasks = Task.objects.values().order_by('id')
             tasks_list = list(tasks)
             # json形式でレスポンスを返す
             return JsonResponse(tasks_list, safe=False, status=200)
