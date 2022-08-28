@@ -72,6 +72,13 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# 環境変数でDJANGO_READ_ENV_FILEをTrueにしておくと.envを読んでくれる。
+READ_ENV_FILE = env.bool('DJANGO_READ_ENV_FILE', default=False)
+if READ_ENV_FILE:
+    env_file = str(BASE_DIR.path('.env'))
+    env.read_env(env_file)
+
+
 DATABASES = {
     'default': env.db(),
 }
