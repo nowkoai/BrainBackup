@@ -16,6 +16,7 @@ from .models import Neuron
 import json
 from django.forms import model_to_dict #No
 from django.views.generic import View
+import logging
 
 def signup(request):
     if request.method == 'POST':
@@ -34,9 +35,10 @@ def signup(request):
 class TaskView(LoginRequiredMixin,View):
     def get(self, request):
         # リクエストがjson形式のとき
+        logging.debug('getしました')
         if request.headers.get("Content-Type") == "application/json":
             # すべてのtaskを辞書型で受け取る
-            tasks = Task.objects.all()
+            tasks = Task.objects.all().values()
             tasks_list = list(tasks)
             # json形式でレスポンスを返す
             return JsonResponse(tasks_list, safe=False, status=200)
@@ -46,7 +48,7 @@ class TaskView(LoginRequiredMixin,View):
         # json文字列を辞書型にし、pythonで扱えるようにする。
         task = json.loads(request.body)
         form = TaskForm(task)
-
+        logging.debug('postしました')
         # データが正しければ保存する。
         if form.is_valid():
             new_task = form.save()
